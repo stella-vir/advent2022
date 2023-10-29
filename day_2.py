@@ -63,11 +63,8 @@ def get_result(input):
     sum = 0
     for i in input:
         a, b = i.split(' ')
-        print(a, b)
         sum += get_score(b)
-        print(sum)
         res = get_winner(a, b)
-        print(res)
         if res == 'WIN':
             sum += 6
         elif res == 'DRAW':
@@ -110,7 +107,6 @@ def get_result_2(input):
     sum = 0
     for i in input:
         a, b = i.split(' ')
-        print(a, b)
         outcome = get_outcome(b)
         score, letter = get_letter(a, outcome)
         score2 = get_score(letter)

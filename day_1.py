@@ -1,7 +1,5 @@
 import sys
 
-input0 = open("day_1.txt", "r")
-
 input = '''
 1000
 2000
@@ -19,14 +17,6 @@ input = '''
 10000
 '''
 
-sum = 0
-sum_array = []
-max = 0
-top_3 = []
-sum_3 = 0
-
-
-
 '''
 input_max -> 24000
 top_3 -> 45000
@@ -36,38 +26,49 @@ top_3 -> 204837
 
 '''
 
+input0 = open("day_1.txt", "r")
+input = input0.read().strip().split("\n")
 
+# input = input.strip().split('\n')
 
-# input = input.split("\n")
-# input = input[1:-1]
-
-input = input0.read().split("\n")
 input.append('')
-print(input[0])
-print(input[-1])
-print(len(input))
+# print(input)
 
 
-for i in range(len(input)):
-    if input[i] == '':
-       sum_array.append(sum)
-       sum = 0
-    else:
-        sum += int(input[i])
 
+def get_sum(inp):
+    sum = 0
+    sum_array = []
+    for i in range(len(inp)):
+        if input[i] == '':
+            sum_array.append(sum)
+            sum = 0
+        else:
+            sum += int(input[i])
+    return sum_array
 
-for i in range(len(sum_array)):
-    max = sum_array[i] if sum_array[i] > max else max
+def get_max(inp):
+    max = 0
+    sum_array = get_sum(inp)
+    for i in range(len(sum_array)):
+        max = sum_array[i] if sum_array[i] > max else max
+    return max
 
+# res = get_max(input)
+# print(res)
 
-sum_array.sort()
-# print(sum_array)
-print(max)
-top_3 = sum_array[-1:-4:-1]
-print(top_3)
-for i in range(len(top_3)):
-    sum_3 += top_3[i]
-print(sum_3)
+def get_top_3(inp):
+    top_3 = []
+    sum_3 = 0
+    sum_array = get_sum(inp)
+    sum_array.sort()
+    top_3 = sum_array[-1:-4:-1]
+    for i in range(len(top_3)):
+        sum_3 += top_3[i]
+    return sum_3
+
+res = get_top_3(input)
+print(res)
 
     
 
