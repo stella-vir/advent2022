@@ -58,39 +58,47 @@ def parse(inp):
 
 def get_bucket(start, end, matrix):
     print(start, '->', end)
-    print('matrix', matrix)
+    print('matrix before', matrix)
     for k, v in matrix.items():
         if v[0] == start:
             if v[1] == 1:
                 matrix[k] = (end, v[1])
-                break
             else:
-                print('k, v[1]', k, v[1])
                 matrix[k] = (start, v[1] - 1)
-                break
-    print('matrix', matrix)
-    sys.exit()
+        if v[0] == end:
+            matrix[k] = (end, v[1] + 1)
+    print('matrix after', matrix)
 
 def get_moves(moves, matrix):
     matrix = dict(sorted(matrix.items(), key=lambda item: item[1][0]))
     not_one = defaultdict(list)
-    prev = 0
+    val = 1
     for i, (k, v) in enumerate(matrix.items()):
         if v[1] == 1:
             v0 = v[0]
             one = [(k, v) for k, v in matrix.items() if v[0] == v0]
             not_one = {k: {'value': v} for k, v in matrix.items() if k not in one[0]}
-    print('not one', not_one)
-    for i, (k, v) in enumerate(not_one.items()):
-        print('k, v', k, v)
-        if v['value'][0] != prev:
+    first = {k: v for k, v in not_one.items() if v['value'][0] == 1}
+    third = {k: v for k, v in not_one.items() if v['value'][0] == 3}
+    for i, (k, v) in enumerate(first.items()):
+        if i == 0:
             v['value'] = (v['value'][0], 1)
         else:
-            v['value'] = (v['value'][0], 2)
-    prev = v['value'][0]
-    print('not one', not_one)
-    print(matrix)
-    sys.exit()
+            val += 1
+            v['value'] = (v['value'][0], val)
+    val = 1
+    for i, (k, v) in enumerate(third.items()):
+        if i == 0:
+            v['value'] = (v['value'][0], 1)
+        else:
+            val += 1
+            v['value'] = (v['value'][0], val)
+    for k in matrix.keys():
+        if k in first:
+            matrix[k] = first[k]['value']
+        elif k in third:
+            matrix[k] = third[k]['value']
+
     for move in moves:
         amt, start, end = move
         amt = int(amt)
