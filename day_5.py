@@ -1,5 +1,4 @@
 import sys
-from collections import defaultdict
 
 input = '''
     [D]    
@@ -38,10 +37,12 @@ i 0 1
 '''
 
 
-input = input.split('\n')
+# input = input.split('\n')
+input = open('day_5.txt').read().split('\n')
+# print(input)
 
 def parse(inp):
-    matrix = defaultdict(list)
+    matrix = {}
     moves = []
     stack = 1
     for level, line in enumerate(inp):
@@ -53,64 +54,103 @@ def parse(inp):
             for i, char in enumerate(line):
                 if char.isalpha():
                     stack = i // 4 + 1
-                    matrix[char] = (stack, level)
+                    # duplicate letters
+                    matrix[(stack, level+1)] = (char)
     return moves, matrix
 
-def get_bucket(start, end, matrix):
-    print(start, '->', end)
-    print('matrix before', matrix)
+def get_bucket(start, end, matrix, i):
+    another_matrix = {}
+    values_dict = {}
+
     for k, v in matrix.items():
-        if v[0] == start:
-            if v[1] == 1:
-                matrix[k] = (end, v[1])
+        k0 = k[0]
+        if k0 not in values_dict:
+            values_dict[k0] = []
+        values_dict[k0].append((k, v))
+    print('values_dict', values_dict)
+    sys.exit()
+
+    for k, v in matrix.items():
+        k0 = k[0]
+        k1 = k[1]
+        if k0 == start:
+            print('moving pieces from ', (start, k1))
+            if k1 == 1:
+                another_matrix[(end, 1)] = v
             else:
-                matrix[k] = (start, v[1] - 1)
-        if v[0] == end:
-            matrix[k] = (end, v[1] + 1)
-    print('matrix after', matrix)
+                another_matrix[(start, k1 - 1)] = v
+            if k0 == 2 and k1 == 3:
+                print('another3', another_matrix)
+            if k0 == 2 and k1 == 4:
+                print('another4', another_matrix)
+                sys.exit()
+        if k0 == end:
+            print('moving pieces to ', (end, k1))
+            another_matrix[(end, k1 + 1)] = v
+        else:
+            another_matrix[k] = v
+
+    matrix = another_matrix
+    return matrix
+
+def get_sequence(matrix):
+    matrix = dict(sorted(matrix.items(), key=lambda item: item[0][0]))
+    values_dict = {}
+    val = {}
+    new_matrix = {}
+
+    # values_dict
+    # {1: [((1, 1), 'M'), ((1, 2), 'F'), ((1, 3), 'C'), ((1, 4), 'W'), ((1, 5), 'T'), ((1, 6), 'D'), ((1, 7), 'L'), ((1, 8), 'B')], 2: [((2, 6), 'L'), ((2, 7), 'B'), ((2, 8), 'N')]}
+    for k, v in matrix.items():
+        k0 = k[0]
+        if k0 not in values_dict:
+            values_dict[k0] = []
+        values_dict[k0].append((k, v))
+
+    for key, values in values_dict.items():
+        if key not in val:
+            val[key] = 0
+        for i, (k, v) in enumerate(values):
+            if i == 0:
+                if k[1] != 1:
+                    k = (k[0], 1)
+            else:
+                val[key] += 1
+                k = (k[0], val[key]+1)
+            new_matrix[k] = v
+    matrix = new_matrix
+    return matrix
 
 def get_moves(moves, matrix):
-    matrix = dict(sorted(matrix.items(), key=lambda item: item[1][0]))
-    not_one = defaultdict(list)
-    val = 1
-    for i, (k, v) in enumerate(matrix.items()):
-        if v[1] == 1:
-            v0 = v[0]
-            one = [(k, v) for k, v in matrix.items() if v[0] == v0]
-            not_one = {k: {'value': v} for k, v in matrix.items() if k not in one[0]}
-    first = {k: v for k, v in not_one.items() if v['value'][0] == 1}
-    third = {k: v for k, v in not_one.items() if v['value'][0] == 3}
-    for i, (k, v) in enumerate(first.items()):
-        if i == 0:
-            v['value'] = (v['value'][0], 1)
-        else:
-            val += 1
-            v['value'] = (v['value'][0], val)
-    val = 1
-    for i, (k, v) in enumerate(third.items()):
-        if i == 0:
-            v['value'] = (v['value'][0], 1)
-        else:
-            val += 1
-            v['value'] = (v['value'][0], val)
-    for k in matrix.keys():
-        if k in first:
-            matrix[k] = first[k]['value']
-        elif k in third:
-            matrix[k] = third[k]['value']
-
     for move in moves:
         amt, start, end = move
         amt = int(amt)
         start = int(start)
         end = int(end)
         for i in range(amt):
-            print('amt', amt, i)
-            get_bucket(start, end, matrix)
+            print('the ', i+1, ' round moving from', start, 'to ',  end)
+            matrix = get_sequence(matrix)
+            matrix = get_bucket(start, end, matrix, i)
+        matrix = dict(sorted(matrix.items(), key=lambda item: item[0][0]))
+        if start == 2:
+            print(matrix)
+            sys.exit()
+    return matrix
+
+def get_letters(matrix):
+    matrix = dict(sorted(matrix.items(), key=lambda item: item[1][0]))
+    letters = ''
+    for k, v in matrix.items():
+        if k[1] == 1:
+            letters += v
+    return letters
 
 def get_crates(inp):
     moves, matrix = parse(inp)
-    get_moves(moves, matrix)
+    matrix = get_moves(moves, matrix)
+    letters = get_letters(matrix)
+
+    return letters
 
 res = get_crates(input)
 print(res)
