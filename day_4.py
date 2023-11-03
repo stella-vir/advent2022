@@ -92,8 +92,9 @@ def get_ctn_2(inp):
             count += 1
     return count
 
-res = get_ctn_2(input)
-print(res)
+if __name__ == "__main__":
+    res = get_ctn_2(input)
+    print(res)
 
 
 

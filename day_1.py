@@ -67,8 +67,9 @@ def get_top_3(inp):
         sum_3 += top_3[i]
     return sum_3
 
-res = get_top_3(input)
-print(res)
+if __name__ == "__main__":
+    res = get_top_3(input)
+    print(res)
 
     
 

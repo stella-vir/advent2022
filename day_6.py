@@ -60,5 +60,7 @@ def get_diff_2(inp):
             l += 1
         char.append(inp[r])
             
-res = get_diff_2(input)
-print(res)
+
+if __name__ == "__main__":
+    res = get_diff_2(input)
+    print(res)

@@ -122,6 +122,7 @@ def get_sum_2(inp):
         sum += get_score(com)
     return sum
 
-res = get_sum_2(input)
-print(res)
+if __name__ == "__main__":
+    res = get_sum_2(input)
+    print(res)
 

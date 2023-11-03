@@ -114,5 +114,6 @@ def get_result_2(input):
 
     return sum
 
-res = get_result_2(input)
-print(res)
+if __name__ == "__main__":
+    res = get_result_2(input)
+    print(res)

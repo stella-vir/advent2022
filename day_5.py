@@ -77,5 +77,7 @@ def get_bucket_2(inp):
     letters = get_letters(matrix)
     return letters
 
-res = get_bucket_2(input)
-print(res)
+
+if __name__ == "__main__":
+    res = get_bucket_2(input)
+    print(res)
