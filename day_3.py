@@ -1,6 +1,6 @@
 import sys
 
-input = '''
+inputs = '''
 vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg
@@ -9,13 +9,6 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 
 '''
-
-input0 = open('day_3.txt', 'r').read()
-
-# input = input.strip().split('\n')
-input = input0.strip().split('\n')
-
-# print(input)
 
 '''
 vJrwpWtwJgWr - hcsFMMfFFhFp -> p
@@ -41,6 +34,14 @@ CrZsJsPPZsGzwwsLwLmpwMDw
 r 18 + Z 52  = 70
 
 '''
+
+inputs = inputs.strip().split('\n')
+
+# inputs0 = open('day_3.txt', 'r').read()
+# inputs = inputs0.strip().split('\n')
+
+# print(inputs)
+
 
 def get_half(text):
     first = text[:len(text)//2]
@@ -73,8 +74,6 @@ def get_score(letter):
 
     return score
 
-
-
 def get_sum(inp):
     sum = 0
     for i in inp:
@@ -82,10 +81,6 @@ def get_sum(inp):
         com = get_common_letter(first, second)
         sum += get_score(com)
     return sum
-
-# res = get_sum(input)
-# print(res)
-
 
 def every_three_lines(inp):
     res = []
@@ -112,7 +107,6 @@ def find_common(a, b, c):
         if item in count_b and item in count_c:
             return item
 
-
 def get_sum_2(inp):
     sum = 0
     arr = every_three_lines(inp)
@@ -123,6 +117,8 @@ def get_sum_2(inp):
     return sum
 
 if __name__ == "__main__":
-    res = get_sum_2(input)
+    # res = get_sum(inputs)
+    res = get_sum_2(inputs)
+    
     print(res)
 

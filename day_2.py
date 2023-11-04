@@ -1,17 +1,17 @@
 import sys
 
-input = '''
+inputs = '''
 A Y
 B X
 C Z
 '''
 
-# input = input.strip().split('\n')
+inputs = inputs.strip().split('\n')
 
-input0 = open('day_2.txt', 'r').read()
-input = input0.strip().split('\n')
+# inputs0 = open('day_2.txt', 'r').read()
+# inputs = inputs0.strip().split('\n')
 
-print(input)
+# print(inputs)
 
 '''
 A Rock X
@@ -47,8 +47,6 @@ def get_winner(a, b):
                 return 'LOSS'
     return 'Not Valid'
     
-
-
 def get_score(a):
     if a == 'X':
         return 1
@@ -58,10 +56,9 @@ def get_score(a):
         return 3
     return 0
 
-
-def get_result(input):
+def get_result(inputs):
     sum = 0
-    for i in input:
+    for i in inputs:
         a, b = i.split(' ')
         sum += get_score(b)
         res = get_winner(a, b)
@@ -72,10 +69,6 @@ def get_result(input):
 
         print(sum)
     return sum
-
-# res = get_result(input)
-# print(res)
-
 
 def get_outcome(a):
     if a == 'X':
@@ -102,10 +95,9 @@ def get_letter(a, b):
                 return 0, layers[(i-1) % len(layers)][1]
     return 0, 'Not Valid'
 
-
-def get_result_2(input):
+def get_result_2(inputs):
     sum = 0
-    for i in input:
+    for i in inputs:
         a, b = i.split(' ')
         outcome = get_outcome(b)
         score, letter = get_letter(a, outcome)
@@ -115,5 +107,7 @@ def get_result_2(input):
     return sum
 
 if __name__ == "__main__":
-    res = get_result_2(input)
+    # res = get_result(inputs)
+    res = get_result_2(inputs)
+    
     print(res)

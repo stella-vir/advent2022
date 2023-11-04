@@ -1,6 +1,6 @@
 import sys
 
-input = '''
+inputs = '''
 zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw
 '''
 
@@ -23,15 +23,16 @@ zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw
 26
 '''
 
-# input = input.strip()
-input = open('day_6.txt').read().strip()
+inputs = inputs.strip()
+# inputs = open('day_6.txt').read().strip()
 
-# print(input)
+# print(inputs)
 
 def get_diff(inp):
     char = []
     char.append(inp[0])
     l = 0
+    
     for i in range(len(inp) - 1):
         r = i+1
         if len(char) == 4:
@@ -41,9 +42,7 @@ def get_diff(inp):
             del char[:idx+1]
             l += 1
         char.append(inp[r])
-            
-# res = get_diff(input)
-# print(res)
+    return 0
 
 def get_diff_2(inp):
     char = []
@@ -52,15 +51,17 @@ def get_diff_2(inp):
     for i in range(len(inp) - 1):
         r = i+1
         if len(char) == 14:
-            print(char)
             return r
         if inp[r] in char:
             idx = next((i for i, v in enumerate(char) if v == inp[r]), None)
             del char[:idx+1]
             l += 1
         char.append(inp[r])
+    return 0
             
 
 if __name__ == "__main__":
-    res = get_diff_2(input)
+    # res = get_diff(inputs)
+    res = get_diff_2(inputs)
+
     print(res)

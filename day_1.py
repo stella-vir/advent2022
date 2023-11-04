@@ -1,6 +1,6 @@
 import sys
 
-input = '''
+inputs = '''
 1000
 2000
 3000
@@ -18,21 +18,20 @@ input = '''
 '''
 
 '''
-input_max -> 24000
+inputs_max -> 24000
 top_3 -> 45000
 
-input0_max -> 68442
+inputs0_max -> 68442
 top_3 -> 204837
 
 '''
+inputs = inputs.strip().split('\n')
+inputs.append('')
 
-input0 = open("day_1.txt", "r")
-input = input0.read().strip().split("\n")
+# inputs0 = open("day_1.txt", "r")
+# inputs = inputs0.read().strip().split("\n")
 
-# input = input.strip().split('\n')
-
-input.append('')
-# print(input)
+# print(inputs)
 
 
 
@@ -40,11 +39,11 @@ def get_sum(inp):
     sum = 0
     sum_array = []
     for i in range(len(inp)):
-        if input[i] == '':
+        if inputs[i] == '':
             sum_array.append(sum)
             sum = 0
         else:
-            sum += int(input[i])
+            sum += int(inputs[i])
     return sum_array
 
 def get_max(inp):
@@ -53,9 +52,6 @@ def get_max(inp):
     for i in range(len(sum_array)):
         max = sum_array[i] if sum_array[i] > max else max
     return max
-
-# res = get_max(input)
-# print(res)
 
 def get_top_3(inp):
     top_3 = []
@@ -68,7 +64,9 @@ def get_top_3(inp):
     return sum_3
 
 if __name__ == "__main__":
-    res = get_top_3(input)
+    # res = get_max(inputs)
+    res = get_top_3(inputs)
+    
     print(res)
 
     

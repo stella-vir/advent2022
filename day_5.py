@@ -1,7 +1,7 @@
 import sys
 from collections import defaultdict
 
-input = '''
+inputs = '''
     [D]    
 [N] [C]    
 [Z] [M] [P]
@@ -13,8 +13,15 @@ move 2 from 2 to 1
 move 1 from 1 to 2
 '''
 
-# input = input.split('\n')
-input = open('day_5.txt').read().split('\n')
+'''
+CMZ
+
+MCD
+'''
+
+inputs = inputs.split('\n')
+
+# inputs = open('day_5.txt').read().split('\n')
 
 def parse(inp):
     matrix = defaultdict(list)
@@ -59,9 +66,6 @@ def get_bucket(inp):
     return letters
 
 
-# res = get_bucket(input)
-# print(res)
-
 def get_moves_2(moves, matrix):
     for move in moves:
         amt, start, end = move
@@ -79,5 +83,7 @@ def get_bucket_2(inp):
 
 
 if __name__ == "__main__":
-    res = get_bucket_2(input)
+    res = get_bucket(inputs)
+    # res = get_bucket_2(inputs)
+
     print(res)

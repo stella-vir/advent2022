@@ -1,6 +1,7 @@
 import sys 
+from collections import defaultdict
 
-input = '''
+inputs = '''
 $ cd /
 $ ls
 dir a
@@ -27,72 +28,57 @@ $ ls
 '''
 
 '''
+$ cd / $ cd a
 $ ls
 dir e
 29116 f
 2557 g
 62596 h.lst
-$ cd e
-$ ls
-584 i
-$ cd ..
+$ cd e '' cd ..
+{a: e, f, g, h}
+
 
 584 + 94853 -f (size 29116), g (size 2557), and h.lst (size 62596), plus file i(584) + 24933642 = 48381165
 95437 (94853 + 584) < 100000
 '''
+inputs += '$ ls'
 
-# input = input.strip().split('\n')
-input = open('day_7.txt').read().strip().split('\n')
+inputs = inputs.strip().split('\n')
+# input = open('day_7.txt').read().strip().split('\n')
+
+# print(inputs)
+
+
+def test(inp):
+    test_sentence = 'not passed'
+    dirs = defaultdict(list)
+    sub_total = 0
+    threshold = 100000
+
+    l = 0
+    for i in range(len(inp)-1):
+        r = i+1
+        if '$ cd' in inp[l]:
+            _, _, dir_name = inp[l].split(' ')
+            if inp[r].startswith('dir'):
+                _, name = inp[r].split(' ')
+                dirs[dir_name].append(name)
+            if inp[r][0].isdigit():
+                num, _ = inp[r].split(' ')
+                sub_total += int(num)
+                dirs[dir_name].append(sub_total)
+                sub_total = 0
+                if '$ cd' in inp[r]:
+                    l = r
+                    r += 1
+    if len(dirs) < 4:
+        print(test_sentence, 'not 4 sub dirs', len(dirs))
 
 def parse(inp):
-    between_ls = False
-    dirs = []
-
-    for i, line in enumerate(inp):
-        if 'dir' in line:
-            _, level = line.split(' ')
-            dirs.append(level)
-        elif line[0].isdigit():
-            size, key = line.split(' ')
-            size = int(size)
-            if size < 100000:
-                if 'ls' in input[i-1]:
-                    dirs.append((key, size))
-                else:
-                    dirs.append(size)
-    return dirs
+    pass
 
 def get_total(dirs):
-    print(dirs)
-    total_arr = []
-    sub_total = 0
-    total = 0
-
-    for val in dirs:
-        if isinstance(val, int):
-            sub_total += val
-        elif isinstance(val, tuple):
-            sub_dir = val[1]
-            sub_total += sub_dir
-            total_arr.append(sub_dir)
-        else:
-            if sub_total != 0:
-                total_arr.append(sub_total)
-            sub_total = 0
-            
-    if sub_total != 0:
-        total_arr.append(sub_total)
-    
-    print(total_arr)
-
-    total_arr = [val for val in total_arr if val < 100000]
-
-    for t in total_arr:
-        total += t
-
-    print(total)
-
-    return total
+    pass
 
 
 def get_res(inp):
@@ -102,8 +88,11 @@ def get_res(inp):
     return total
 
 if __name__ == "__main__":
-    res = get_res(input)
-    print(res)
+    test(inputs)
+    
+    # res = get_res(input)
+    # print(res)
+
 
 
 

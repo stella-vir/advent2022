@@ -1,4 +1,4 @@
-input = '''
+inputs = '''
 2-4,6-8
 2-3,4-5
 5-7,7-9
@@ -27,12 +27,12 @@ a > c -> not overlap -> d < a
 
 '''
 
-input0 = open('day_4.txt', 'r').read()
+inputs = inputs.strip().split('\n')
 
-input = input.strip().split('\n')
-# input = input0.strip().split('\n')
+# inputs0 = open('day_4.txt', 'r').read()
+# inputs = inputs0.strip().split('\n')
 
-# print(input)
+# print(inputs)
 
 
 
@@ -64,10 +64,6 @@ def get_ctn(inp):
             count += 1
     return count
 
-
-# res = get_ctn(input)
-# print(res)
-
 def get_overlap(a, b, c, d):
     if a == c:
         return 1
@@ -93,7 +89,9 @@ def get_ctn_2(inp):
     return count
 
 if __name__ == "__main__":
-    res = get_ctn_2(input)
+    # res = get_ctn(inputs)
+    res = get_ctn_2(inputs)
+    
     print(res)
 
 
