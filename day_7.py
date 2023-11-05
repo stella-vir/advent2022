@@ -55,22 +55,23 @@ def test(inp):
     sub_total = 0
     threshold = 100000
 
-    l = 0
-    for i in range(len(inp)-1):
-        r = i+1
+    l, r = 0, 1
+    while len(inp) > 0:
         if '$ cd' in inp[l]:
             _, _, dir_name = inp[l].split(' ')
             if inp[r].startswith('dir'):
                 _, name = inp[r].split(' ')
                 dirs[dir_name].append(name)
-            if inp[r][0].isdigit():
-                num, _ = inp[r].split(' ')
-                sub_total += int(num)
-                dirs[dir_name].append(sub_total)
-                sub_total = 0
-                if '$ cd' in inp[r]:
-                    l = r
+                r += 1
+                if inp[r][0].isdigit():
+                    num, _ = inp[r].split(' ')
+                    sub_total += int(num)
+                    dirs[dir_name].append(sub_total)
+                    sub_total = 0
+                    if '$ cd' in inp[r]:
+                        l = r
                     r += 1
+        return dirs
     if len(dirs) < 4:
         print(test_sentence, 'not 4 sub dirs', len(dirs))
 
