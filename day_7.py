@@ -1,5 +1,5 @@
 import sys 
-from collections import defaultdict
+from collections import defaultdict, deque
 
 inputs = '''
 $ cd /
@@ -44,55 +44,71 @@ $ cd e '' cd ..
 inputs += '$ ls'
 
 inputs = inputs.strip().split('\n')
-# input = open('day_7.txt').read().strip().split('\n')
+# inputs = open('day_7.txt').read().strip().split('\n')
 
 # print(inputs)
 
 
-def test(inp):
-    test_sentence = 'not passed'
-    dirs = defaultdict(list)
-    sub_total = 0
-    threshold = 100000
-
-    l, r = 0, 1
-    while len(inp) > 0:
-        if '$ cd' in inp[l]:
-            _, _, dir_name = inp[l].split(' ')
-            if inp[r].startswith('dir'):
-                _, name = inp[r].split(' ')
-                dirs[dir_name].append(name)
-                r += 1
-                if inp[r][0].isdigit():
-                    num, _ = inp[r].split(' ')
-                    sub_total += int(num)
-                    dirs[dir_name].append(sub_total)
-                    sub_total = 0
-                    if '$ cd' in inp[r]:
-                        l = r
-                    r += 1
-        return dirs
-    if len(dirs) < 4:
-        print(test_sentence, 'not 4 sub dirs', len(dirs))
+def test(folders):
+    test_sentence = 'test not passed 4 sub folders'
+    if len(folders) < 4:
+        print(test_sentence, len(folders))
+    else:
+        print('test passed with 4 sub folders')
 
 def parse(inp):
-    pass
+    filtered_inp = []
+    for i, line in enumerate(inp):
+        if '$ ls' not in line and '$ cd ..' not in line:
+            filtered_inp.append(line)
+    inp = filtered_inp
 
-def get_total(dirs):
-    pass
+    folders = defaultdict(list)
+    name = None
+    for i, line in enumerate(inp):
+        if 'cd' in line:
+            name = line.split(' ')[-1]
+            folders[name] = []
+        elif 'dir' in line:
+            sub_folder = line.split(' ')[-1]
+            folders[name].append(sub_folder)
+        elif line[0].isdigit():
+            num, _ = line.split(' ')
+            num = int(num)
+            folders[name].append(num)
+
+    return folders
+
+def bfs(graph):
+    print(graph)
+    total = 0
+    start = '/'
+    visited = set()
+    queue = deque()
+
+    queue.append(start)
+
+    while queue:
+        key = queue.popleft()
+        if key not in visited:
+            visited.add(key)
+
+            for neighbor in graph[key]:
+                if neighbor not in visited:
+                    print(neighbor)
+                    queue.append(neighbor)
+
 
 
 def get_res(inp):
-    dirs = parse(inp)
-    total = get_total(dirs)
-
-    return total
+    folders = parse(inp)
+    test(folders)
+    total = bfs(folders)
 
 if __name__ == "__main__":
-    test(inputs)
-    
-    # res = get_res(input)
-    # print(res)
+    res = get_res(inputs)
+    print(res)
+
 
 
 
