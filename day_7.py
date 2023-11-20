@@ -1,4 +1,5 @@
 import sys 
+from collections import defaultdict
 
 inputs = '''
 $ cd /
@@ -42,14 +43,22 @@ base case:
 recursion:
 
 -> 1243729
+
+> 30000000 - (70000000 - 48381165) = 8381165
+-> d 24933642
+> 30000000 - (70000000 - total/44376732) = 4376732
+-> 4443914
 '''
 
 
+# inputs = inputs.strip().split('\n')
+inputs = open('day_7.txt').read().strip().split('\n')
 
-inputs = inputs.strip().split('\n')
-# inputs = open('day_7.txt').read().strip().split('\n')
+# part1
+# inputs = [line for line in inputs if '$ ls' not in line and '$ cd ..' not in line]
 
-inputs = [line for line in inputs if '$ ls' not in line and '$ cd ..' not in line]
+# part2
+inputs = [line for line in inputs if '$ ls' not in line and 'dir' not in line]
 
 # with open('test.txt', 'w') as output:
 #     output.write('\n'.join(inputs))
@@ -60,11 +69,14 @@ def test():
     test_tar = 'tbj'
     failure = 'test not passed '
     success = 'test passed '
-    # for line in inputs:
-    #     if test_tar in line:
+    add_up = 0
+    for line in inputs:
+        if test_tar in line and '$ cd' not in line:
             # print(line)
-
-
+            if line[0].isdigit():
+                num, _ = line.split(' ')
+                add_up += int(num)
+    #! print('add up', add_up)
 
 
 def parse(line):
@@ -111,9 +123,59 @@ def get_res():
     total = recursive(last, bucket, total)
     return total
 
-if __name__ == '__main__':
-    res = get_res()
-    print(res)
 
-    test()
+def arr_dict_2(inp):
+    bucket = []
+    folders = defaultdict(int)
+
+    for line in inp:
+        if '$ cd' in line:
+            if '..' in line:
+                bucket.pop()
+            else:
+                sub = parse(line)
+                bucket.append(sub)
+        else:
+            num = parse(line)
+            num = int(num)
+            for i in range(1, len(bucket) + 1):
+                key = '/'.join(bucket[:i])
+                folders[key] += num
+
+    return folders
+
+    
+
+def get_res_2(inp):
+    least = 99999999
+
+    folders = arr_dict_2(inp)
+    
+    # total = folders['/']
+    total = 0
+    for line in inp:
+        if line[0].isdigit():
+            total += parse(line)
+
+    print('total', total)
+    
+    to_delete = 30000000 - (70000000 - total)
+    print('to delete', to_delete)
+
+    for k, v in folders.items():
+        if v > to_delete:
+            least = min(least, v)
+
+    return least
+
+
+if __name__ == '__main__':
+    # res = get_res()
+    # print(res)
+
+    # test()
+
+    res_2 = get_res_2(inputs)
+    print(res_2)
+
 
